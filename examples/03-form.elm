@@ -57,20 +57,36 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div []
-    [ input [ type_ "text", placeholder "Name", onInput Name ] []
-    , input [ type_ "password", placeholder "Password", onInput Password ] []
-    , input [ type_ "password", placeholder "Re-enter Password", onInput PasswordAgain ] []
+    [ viewInput [ type_ "text", placeholder "Name", onInput Name ]
+    , viewInput [ type_ "password", placeholder "Password", onInput Password ]
+    , viewInput [ type_ "password", placeholder "Re-enter Password", onInput PasswordAgain ]
     , viewValidation model
     ]
+
+viewInput : List (Html.Attribute Msg) -> Html Msg
+viewInput inputattribs = 
+    div []
+    [ span [] [ text "asdas" ]
+    , input inputattribs []
+     ]
+
+-- viewInput :String -> List (Html.Attribute Msg) -> Html Msg
+-- viewInput labeltext inputattribs = 
+--     div []
+--     [ span [] [ text labeltext  ]
+--     , input inputattribs []
+--       ]
 
 
 viewValidation : Model -> Html msg
 viewValidation model =
   let
     (color, message) =
-      if model.password == model.passwordAgain then
-        ("green", "OK")
-      else
+      if String.length model.password < 8 then
+        ("red", "Passwords are lame")
+      else if model.password /= model.passwordAgain then
         ("red", "Passwords do not match!")
+      else
+        ("green", "OK")
   in
     div [ style [("color", color)] ] [ text message ]

@@ -46,6 +46,27 @@ update msg model =
       (Model newFace, Cmd.none)
 
 
+sweetFunc : Int -> List Int
+sweetFunc n = 
+  if n <= 0 then
+    [0]
+  else  sweetFunc (n-1) ++ [n]
+
+-- sweetRan : Int -> List Int
+-- sweetRan n = 
+--    if n <= 0 then
+--      [ Random.generate (Random.int 1 6) ]
+--    else sweetFunc (n-1) ++ [n]
+
+intList : Random.Generator (List Int)
+intList =
+    Random.list 5 (Random.int 0 100)
+
+ranList :  Random.Generator (List Int) -> List Int
+ranList = 
+  Random.generate intList
+
+
 
 -- SUBSCRIPTIONS
 
@@ -64,4 +85,6 @@ view model =
   div []
     [ h1 [] [ text (toString model.dieFace) ]
     , button [ onClick Roll ] [ text "Roll" ]
+    , ul [] (List.map (\l -> li [] [ text (toString l)]) (sweetFunc 4) )
+    , ul [] (List.map (\l -> li [] [ text (toString l)]) (intList) )
     ]
